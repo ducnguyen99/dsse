@@ -24,13 +24,13 @@ class TSet:
 
 
     def setup(self):
-      self.kt = get_random_bytes(16)
+      self.kt = get_random_bytes(32)
       self.FileCnt = {}
       self.DictW = {}
 
     def update(self, op: str, w: str, id: str):
         if w not in self.FileCnt:
-          self.FileCnt[w] = 0
+          self.FileCnt[w] = -1
 
         self.FileCnt[w] = self.FileCnt[w] + 1
 
@@ -41,21 +41,24 @@ class TSet:
             
 
 
-    def retrieve(self, w: str):
+    def search(self, w: str):
       Tlist = []
-      for i in self.FileCnt[w]:
+      # print(self.DictW)
+      for i in range(0, self.FileCnt[w] + 1):
         addr = prf(self.kt, w + str(i) + str(0))
-        if addr in self.DictW.keys:
+        if addr in self.DictW:
           Tlist.append(self.DictW[addr])
 
+      print(len(Tlist))
       res = [] 
-      for i in len(Tlist):
-        tmp = Tlist[i]
-         
+      for i in range(0, len(Tlist)):
+        tmp = xor_bytes(Tlist[i], prf(self.kt, w + str(i) + str(1)))
+        tmp = tmp.decode('utf-8') # tmp has length 32 bytes, to remove opp, slice to -30
+        res.append(tmp[:-30])
+        
 
-
-         
-      return t
+        
+      return res
 
 
 def genStag(kt: bytes, w: str) -> bytes:
