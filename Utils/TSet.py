@@ -45,12 +45,12 @@ class TSet:
       Tlist = []
       for i in self.FileCnt[w]:
         addr = prf(self.kt, w + str(i) + str(0))
-        if addr in self.DictW:
+        if addr in self.DictW.keys:
           Tlist.append(self.DictW[addr])
 
       res = [] 
       for i in len(Tlist):
-        # tmp = 
+        tmp = Tlist[i]
          
 
 
